@@ -2,19 +2,19 @@
 (setf test-sol-a 24000)
 (setf test-sol-b 45000)
 
-;; Turn the input file into whatever form you will use for both parts
-;; (get-file-lines) and (get-file-string) will be useful
 (defun parse-input (input-file)
+  ;;; Splits on double newlines, then splits on single newlines
   (mapcar (lambda (s) (mapcar 'parse-integer (split #\Newline s)))
 	  (split (format nil "~%~%") (get-file-string input-file))))
 
-(defmacro make-func (input-list length)
-  `(apply '+ (subseq (sort (mapcar 'eval (mapcar (lambda (l) (cons '+ l)) ,input-list)) '>) 0 ,length)))
+(defmacro solve (input-list length)
+  ;;; Creates a function that sums the lists, sorts them and return the first n elements
+  `(apply '+ (subseq (sort (mapcar (lambda (l) (apply '+ l)) ,input-list) '>) 0 ,length)))
 
 ;; Returns the solution for part a
 (defun part-a (parsed-input)
-  (make-func parsed-input 1))
+  (solve parsed-input 1))
 
 ;; Returns the solution for part b
 (defun part-b (parsed-input)
-  (make-func parsed-input 3))
+  (solve parsed-input 3))
